@@ -1,0 +1,110 @@
+﻿@model ZavrsniProjekat.Models.Furniture
+
+@{
+    ViewBag.Title = "Details";
+    Layout = null;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Furniture</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Code, new { htmlAttributes = new { @id = "code" } })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name, new { htmlAttributes = new { @id = "name" } })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CountryOfOrigin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CountryOfOrigin, new { htmlAttributes = new { @id = "country" } })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.YearMade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.YearMade, new { htmlAttributes = new { @id = "year" } })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price, new { htmlAttributes = new { @id = "price" } })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountInStore)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountInStore, new { htmlAttributes = new { @id = "amount" } })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Photo)
+        </dt>
+
+        <dd>
+            @if (Model.Photo == null)
+            {
+                <div class="form-group col-md-10">No Photo</div>
+            }
+            else
+            {
+                <img id="photo" class="img-thumbnail" width="200" height="200"
+                     src="@String.Format("data:{0}{1}{2}", Model.PhotoType, ";base64,", Convert.ToBase64String(Model.Photo))"/>
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.Name, new { htmlAttributes = new { @id = "category" } })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FurnitureShop)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FurnitureShop.Name, new { htmlAttributes = new { @id = "shop" } })
+        </dd>
+
+    </dl>
+    @if (User.IsInRole("Buyer"))
+    {
+        <div class="form-group">
+            <div>
+                 <button class='btn btn-info' onclick="location.href='@Url.Action("AddToCart","ShoppingCart", new { furnitureId = Model.FurnitureId})'">
+                    <i class='fa fa-shopping-cart'></i> Add to cart
+                 </button>                
+                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+
+
+    }
+    
+</div>
+

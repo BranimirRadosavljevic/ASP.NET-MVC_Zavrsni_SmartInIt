@@ -1,0 +1,175 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "List Of Shops";
+}
+
+<h2>Furniture shops</h2>
+
+<p>Search shops by <b>Name, Owner, Address, PIB and Account Number.</b></p>
+
+<div class="modal fade" id="modalAdd" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mTitle">Furniture Shops</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<a class="btn btn-success" style="margin-bottom:10px;color:white" data-toggle="modal"
+   data-target="#modalAdd"
+   onclick="PopupForm('@Url.Action("Add","FurnitureShops")')"><i class="fa fa-plus"></i> Add New Shop</a>
+
+<div style="width:1300px">
+    <table id="Table" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>PIB</th>
+                <th>Account  Number</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tfoot style="display:table-header-group">
+            <tr>
+                <th class="searchable">Name</th>
+                <th class="searchable">Owner</th>
+                <th class="searchable">Address</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="searchable">PIB</th>
+                <th class="searchable">Account Number</th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody class="table table-bordered"></tbody>
+    </table>
+</div>
+
+    <link href="~/Scripts/datatables.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+    @section scripts{
+        <script src="~/Scripts/datatables.min.js"></script>
+        <script src="~/Scripts/moment.min.js"></script>
+
+        <script>
+        $(document).ready(function () {
+            dataTable = $("#Table").DataTable({
+                "ajax": {
+                    "url": "/FurnitureShops/GetData/",
+                    "type": "GET",
+                    "datatype": "json",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    { "data": "Name"},
+                    { "data": "Owner" },
+                    { "data": "Address" },
+                    { "data": "Phone" },
+                    { "data": "Email" },
+                    { "data": "Website" },
+                    { "data": "Pib" },
+                    { "data": "AccountNo" },
+                    {
+                        "data": "FurnitureShopId", "width": "22%", sortable:false, render: function(data) {
+                            return "<a class='btn btn-outline-info btn-block btn-sm'" +
+                                    "data-toggle='modal' data-target='#modalAdd'onclick=PopupForm('@Url.Action("Edit","FurnitureShops")/" +
+                                data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-outline-success btn-block btn-sm' data-toggle='modal' data-target='#modalAdd'" +
+                                    "onclick=PopupForm('@Url.Action("Details","FurnitureShops")/" +
+                                data + "')><i class='fa fa-list'></i> Details</a ><a class='btn btn-outline-danger btn-block btn-sm'" +
+                                    "onclick=Delete(" + data + ")><i class='fa fa-trash'></i> Delete</a >";
+                        }
+
+                    }
+                ],
+                "language": {
+                    "emptyTable": "No data found"
+                },
+                "responsive": true,
+                "dom": 'lrtip'
+            });
+
+            $('.searchable').each(function () {
+                var title = $('#Table thead th').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" size="12"/>')
+            });
+
+            dataTable.columns().every(function () {
+                var datatableColumn = this;
+
+                $(this.footer()).find('input').on('keyup change', function () {
+                    datatableColumn.search(this.value).draw();
+                });
+            })
+        });
+
+        function PopupForm(url) {
+            var formDiv = $('.modal-body');
+            $.get(url)
+                .done(function (response) {
+                    var modal = $(this);
+                    formDiv.html(response);
+                });
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            $("#modalAdd").modal('hide');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+        function Delete (id){
+            if (confirm("Are you sure you want to delete this Shop?")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "FurnitureShops")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+        }
+        </script>
+    }

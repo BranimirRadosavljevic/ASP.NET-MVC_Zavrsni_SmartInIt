@@ -1,0 +1,68 @@
+﻿@model ZavrsniProjekat.Models.Bill
+
+@{
+    ViewBag.Title = "Report";
+}
+
+<h2>Generate Report for period</h2>
+
+
+@using (Html.BeginForm("GenerateReport", "Bills"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Report</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label("Name", "Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Category", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessage("Category", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("StartDate", "Start Date",
+                htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("StartDate", new { htmlAttributes = new {@class = "form-control date-picker", Value = "", id = "StartDate"} })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("EndDate", "End Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("EndDate", new { htmlAttributes = new { @class = "form-control date-picker", Value = "", @id = "EndDate"} })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Home Page", "Index", "Home")
+</div>
+
+@Styles.Render("~/Content/themes/smoothness/jquery-ui-themes-1.12.1/jquery-ui.min.css")
+@section Scripts {
+    @Scripts.Render("~/Scripts/jquery-ui.min.js");
+    <script>
+        $(function () {
+            $(".date-picker").datepicker({
+                dateFormat: "dd/MM/yy",
+                maxDate: "0"
+            });
+        });
+    </script>
+}
+
+

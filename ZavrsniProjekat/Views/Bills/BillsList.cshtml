@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ZavrsniProjekat.Models.Bill>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Bills</h2>
+
+<p>Search Bills by <b>Date, Buyer,</b> or <b>Furniture Shop.</b></p>
+
+
+<table id="Table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>Bill Id</th>
+            <th>Buyer</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Subtotal</th>
+            <th>Total Tax</th>
+            <th>Total Price</th>
+            <th>Items</th>
+            <th>Furniture Shops</th>
+        </tr>
+    </thead>
+
+</table>
+
+<link href="~/Scripts/datatables.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="~/Scripts/datatables.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            dataTable = $("#Table").DataTable({
+                "ajax": {
+                    "url": "/Bills/GetAllData/",
+                    "type": "GET",
+                    "datatype": "json",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    { "data": "BillId", "searchable": false },
+                    { "data": "Buyer" },
+                    {
+                        "data": "TimeOfPurchase", render: function (data) {
+                            return moment(data).format("DD.MM.YYYY.")
+                        }
+                    },
+                    {
+                        "data": "TimeOfPurchase", "searchable": false, render: function (data) {
+                            return moment(data).format("HH:mm:ss")
+                        }
+                    },
+                    { "data": "Subtotal", "searchable": false, render: $.fn.dataTable.render.number('.', ',', 2, '', " Din.") },
+                    { "data": "TotalTax", "searchable": false, render: $.fn.dataTable.render.number('.', ',', 2, '', " Din.") },
+
+                    { "data": "TotalPrice", "searchable": false, render: $.fn.dataTable.render.number('.', ',', 2, '', " Din.") },
+                    {
+                        "data": "BillItems", "searchable": false, render: function (data) {
+                            var str = "";
+                            for (var i = 0; i < data.length; i++) {
+                                str += data[i].Item + ", ";
+                            }
+                            return str.split(", ").join("<br/>");
+                        }
+                    },
+                    {
+                        "data": "FurnitureShops", render: function (data) {
+                            var str = "";
+                            for (var i = 0; i < data.length; i++) {
+                                str += data[i].Shop + ", ";
+                            }
+                            return str.split(", ").join("<br/>");
+                        }
+                    },
+                ],
+                "language": {
+                    "emptyTable": "No data found"
+                },
+                "responsive": "true"
+            });
+
+        });
+
+    </script>
+}

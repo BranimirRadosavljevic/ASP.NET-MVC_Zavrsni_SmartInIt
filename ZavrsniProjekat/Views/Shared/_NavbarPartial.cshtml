@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNet.Identity
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                @Html.ActionLink("Furniture", "Index", "Furnitures",
+           new { area = "" }, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Furniture Shops", "Index", "FurnitureShops",
+           new { area = "" }, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Furniture categories", "Index", "Categories",
+           new { area = "" }, new { @class = "nav-link" })
+            </li>
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    @Html.ActionLink("Buyers", "IndexBuyers", "Users",
+                        new { area = ""}, new { @class = "nav-link" })
+                </li>
+
+                <li class="nav-item">
+                    @Html.ActionLink("Manage all users", "Index", "Users",
+                        new { area = ""}, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Bills", "Index", "Bills",
+                        new { area = ""}, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Reports", "Report", "Bills",
+                        new { area = ""}, new { @class = "nav-link" })
+                </li>
+            }
+        </ul>
+    </div>
+
+
+}
+
+@if (User.IsInRole("Buyer"))
+{
+    @Html.Action("Summary", "ShoppingCart")
+}
+
+
+

@@ -1,0 +1,87 @@
+﻿
+@{
+                /**/
+
+                ViewBag.Title = "List Of Shops";
+}
+
+<h2>Furniture shops</h2>
+<p>You can search shops by <b>Name, Owner, Address, PIB and Account Number.</b></p>
+
+<div style="width:1200px">
+    <table id="Table" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>PIB</th>
+                <th>Account  Number</th>                
+            </tr>
+        </thead>
+        <tfoot style="display:table-header-group">
+            <tr>
+                <th class="searchable">Name</th>
+                <th class="searchable">Owner</th>
+                <th class="searchable">Address</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="searchable">PIB</th>
+                <th class="searchable">Account Number</th>                
+            </tr>
+        </tfoot>
+        <tbody class="table table-bordered"></tbody>
+    </table>
+</div>
+
+<link href="~/Scripts/datatables.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="~/Scripts/datatables.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            dataTable = $("#Table").DataTable({
+                "ajax": {
+                    "url": "/FurnitureShops/GetData/",
+                    "type": "GET",
+                    "datatype": "json",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    { "data": "Name" },
+                    { "data": "Owner" },
+                    { "data": "Address" },
+                    { "data": "Phone" },
+                    { "data": "Email" },
+                    { "data": "Website" },
+                    { "data": "Pib" },
+                    { "data": "AccountNo" }
+                ],
+                "language": {
+                    "emptyTable": "No data found"
+                },
+                "responsive": true,
+                "dom": 'lrtip'
+            });
+
+            $('.searchable').each(function () {
+                var title = $('#Table thead th').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" size="12"/>')
+            });
+
+            dataTable.columns().every(function () {
+                var datatableColumn = this;
+
+                $(this.footer()).find('input').on('keyup change', function () {
+                    datatableColumn.search(this.value).draw();
+                });
+            })
+        });
+    </script>
+}

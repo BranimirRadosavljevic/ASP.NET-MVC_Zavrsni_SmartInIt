@@ -1,0 +1,41 @@
+﻿@using System.Linq
+@model IEnumerable<ZavrsniProjekat.ViewModels.ReportViewModel>
+@{
+    ViewBag.Title = "Generated Report";
+}
+
+@if (Model.FirstOrDefault() != null)
+{
+<h4>
+    Furniture of category <b>@Model.FirstOrDefault().Category</b>  sold in period between
+                          <b>@Model.FirstOrDefault().StartDate.ToString("dd.MM.yyyy.")</b> and
+                          <b>@Model.FirstOrDefault().EndDate.ToString("dd.MM.yyyy.")</b>
+</h4><br />
+
+    <table class="container table-bordered table-striped">
+        <tr>
+            <th>Shop</th>
+            <th>Amount Sold</th>
+            <th>Total Earnings</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Shop</td>
+                <td>@item.AmountSold</td>
+                <td>@string.Format("{0:c}", @item.Price)</td>
+            </tr>
+        }
+
+    </table><br />
+
+    <h5>Total earnings of all shops for a selected category: <b>@string.Format("{0:c}", @Model.Sum(m => m.Price))</b></h5><br />            
+}
+else
+{
+    <h4>No item of the selected category has been sold in that period.</h4><br />
+}
+
+    <div>
+        @Html.ActionLink("Back", "Report")        
+    </div>

@@ -1,0 +1,14 @@
+﻿@model ZavrsniProjekat.Infrastructure.ShoppingCart
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+<ul class="nav navbar-nav navbar-right">
+<li class="nav-item" style="color:white;margin:10px 10px"><b>Your cart:</b>
+    @Model.Items.Sum(x => x.Quantity) item(s),
+    @Model.ComputeTotalValueWithTax().ToString("c")
+</li>
+ <li class="nav-item" style="margin:5px 20px 5px 10px">
+    <a href=@Url.Action("Index", "ShoppingCart")
+       class="btn btn-outline-light navbar-btn">
+       <i class='fa fa-shopping-cart'></i> Cart</a>
+</li>
+</ul>

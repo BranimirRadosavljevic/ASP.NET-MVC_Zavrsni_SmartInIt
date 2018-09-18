@@ -1,0 +1,40 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    /*background-image: url("Pictures/background1.jpg");
+    background-attachment:fixed;*/
+    background-color: #fefcff;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block !important;
+}
+
+.navbar-brand{
+    float: left;
+    padding:15px 15px;
+    font-size:30px;
+    line-height: 0px;
+    font-weight: bold;
+    font-family: Gabriola
+}

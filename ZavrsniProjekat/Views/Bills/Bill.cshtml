@@ -1,0 +1,101 @@
+﻿@model ZavrsniProjekat.ViewModels.BillViewModel
+
+@{
+    ViewBag.Title = "Order";
+}
+
+<h2>Your Order</h2>
+
+@using (Html.BeginForm("CompletePurchase", "ShoppingCart"))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Bill</h4>    
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Bill To")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Buyer)
+        </dd>        
+        <dt>
+            @Html.DisplayNameFor(model => model.BillItems)
+        </dt>        
+        <dd>
+            <table width="600" style="border-bottom: 1px solid black" class="table-striped table-responsive-sm">
+                <tr style="border-bottom:2px solid black;border-top:2px solid black">
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Shop</th>                    
+                    <th style="text-align:right;padding-right:30px">Price</th>
+                </tr>
+                @{var index = 0;}
+                @foreach (var item in Model.BillItems)
+                {
+                    Html.Hidden("BillItems[" + index + "].Furniture", item.Furniture);
+                    Html.Hidden("BillItems[" + index + "].Price", item.Price);
+                    Html.Hidden("BillItems[" + index + "].Amount", item.Amount);
+                    Html.Hidden("BillItems[" + index + "].FurnitureShop", item.FurnitureShop);
+                    Html.Hidden("BillItems[" + index + "].FurnitureCategory", item.FurnitureCategory);
+                    index++;
+                    <tr>
+                        <td>@item.Furniture</td>
+                        <td>@item.Amount</td>
+                        <td>@item.FurnitureShop</td>                       
+                        <td align="right">@item.Price.ToString("c")</td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+    <table width="600" class="table-responsive-sm">
+        <tr>
+            <td width="350"></td>
+            <th align="right">
+                @Html.DisplayName("Subtotal")
+            </th>
+            <td align="right">
+                @(Model.Subtotal().ToString("c"))
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <b>@Html.DisplayNameFor(model => model.Tax)</b> @Html.DisplayFor(model => model.Tax)
+            </td>
+            <td align="right">
+                @((Model.TotalTax().ToString("c")))
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <td align="right">
+                @Html.DisplayFor(model => model.TotalPrice)
+            </td>
+        </tr>
+    </table>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeOfPurchase)
+        </dt>
+        <dd>
+            @Model.TimeOfPurchase.ToString("dd.MM.yyyy. HH:mm:ss")
+        </dd>
+    </dl>
+    <div class="form-group">
+        <div class="col-md-offset-6 col-md-10">
+            <button type="submit" class="btn btn-success" style="margin-left:18%;width:30%"><i class="fa fa-shopping-bag"></i> Buy</button>
+        </div>
+    </div>
+</div>
+}
+    <p>
+        @Html.ActionLink("Back to Cart", "Index")
+    </p>
+
+
